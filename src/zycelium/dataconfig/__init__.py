@@ -1,4 +1,4 @@
-from dataclasses import dataclass, FrozenInstanceError
+from dataclasses import asdict, dataclass, FrozenInstanceError
 from dataclasses import replace as replace_dataclass
 from pathlib import Path
 
@@ -32,6 +32,18 @@ def load(obj, path="", unrepr=True, replace=False):
         return replace_dataclass(obj, **fields)
 
 
+def save(obj, path="", unrepr=True, overwrite=False):
+    path = locate(
+        file=obj._file, paths=obj._paths, auto=obj._auto, file_path=path
+    )
+    config_obj = ConfigObj(unrepr=unrepr)
+    config_obj.update(asdict(obj))
+    if path.exists() and not overwrite:
+        raise FileExistsError(f"File {path} exists, refusing to overwrite.")
+    with path.open("wb") as outfile:
+        config_obj.write(outfile)
+
+
 def dataconfig(
     _cls=None,
     *,
@@ -50,6 +62,7 @@ def dataconfig(
         setattr(cls, "_paths", paths or ["."])
         setattr(cls, "_auto", auto)
         setattr(cls, "load", load)
+        setattr(cls, "save", save)
         wrapped_cls = dataclass(
             cls,
             init=init,

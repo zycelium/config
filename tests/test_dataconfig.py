@@ -115,9 +115,36 @@ def test_load_frozen():
     path = Path("tests/").joinpath(TEST_FILE_NAME)
     config = Config()
     assert config.message == "test"
-    # When frozen, load needs to be passed `replace=True` 
+    # When frozen, load needs to be passed `replace=True`
     # and its returl value must be assigned to config.
     # This avoids accidental assignment while allowing
     # override.
     config = config.load(path=path, replace=True)
+    assert config.message == "hello-test"
+
+
+def test_save():
+    @dataconfig(file=TEST_FILE_NAME, paths=TEST_PATHS)
+    class Config:
+        message: str = "test"
+
+    config = Config()
+    config.message = "hello-test"
+    config.save(overwrite=True)
+
+    config.load()
+    assert config.message == "hello-test"
+
+
+@pytest.mark.xfail(raises=FileExistsError)
+def test_save_no_overwrite():
+    @dataconfig(file=TEST_FILE_NAME, paths=TEST_PATHS)
+    class Config:
+        message: str = "test"
+
+    config = Config()
+    config.message = "hello-test"
+    config.save(overwrite=False)
+
+    config.load()
     assert config.message == "hello-test"
