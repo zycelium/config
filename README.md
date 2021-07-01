@@ -132,3 +132,28 @@ if we forget, we get the error:
 `dataclasses.FrozenInstanceError: cannot assign to field 'name'`
 
 Once loaded, we cannot overwrite the configuration.
+
+
+### For more examples:
+
+Read through the `tests/` directory, where you will find the 
+expected usage and how and why dataconfig can fail.
+
+
+## Install
+
+From [PyPI](https://pypi.org/)
+
+```console
+
+pip install zycelium.dataconfig
+```
+
+From source:
+
+```console
+
+git clone https://github.com/zycelium/dataconfig.git
+cd dataconfig
+pip install -e .
+```
