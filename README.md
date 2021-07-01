@@ -2,6 +2,8 @@
 
 Create [dataclasses](https://docs.python.org/3/library/dataclasses.html) backed by configuration files.
 
+[![Python package](https://github.com/zycelium/dataconfig/actions/workflows/python-package.yml/badge.svg)](https://github.com/zycelium/dataconfig/actions/workflows/python-package.yml)
+
 ## Usage
 
 ### Use defaults:
