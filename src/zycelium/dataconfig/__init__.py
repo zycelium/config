@@ -1,4 +1,18 @@
 from dataclasses import dataclass
+from pathlib import Path
+
+
+def locate(file, paths, auto, file_path=""):
+    if file_path:
+        return Path(file_path)
+    elif auto:
+        for _path in paths:
+            path = Path(_path).joinpath(file)
+            if path.exists():
+                return path
+        return Path(".").joinpath(file)
+    else:
+        raise FileNotFoundError(f"File {file!r} not found at {paths}.")
 
 
 def dataconfig(
