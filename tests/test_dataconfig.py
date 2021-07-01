@@ -2,6 +2,7 @@ from dataclasses import dataclass, is_dataclass
 from zycelium.dataconfig import dataconfig
 
 TEST_FILE_NAME = "test.ini"
+DEFAULT_FILE_NAME = "config.ini"
 
 
 def test_dataconfig_init_bare():
@@ -11,7 +12,7 @@ def test_dataconfig_init_bare():
 
     config = Config()
     assert is_dataclass(config)
-    assert config._file == "config.ini"
+    assert config._file == DEFAULT_FILE_NAME
 
 
 def test_dataconfig_init_with_file():
@@ -30,5 +31,13 @@ def test_dataconfig_init_without_file():
         pass
 
     config = Config()
-    assert is_dataclass(config)
-    assert config._file == "config.ini"
+    assert config._file == DEFAULT_FILE_NAME
+
+
+def test_dataconfig_init_with_paths():
+    @dataconfig(paths=[".", "tests/"])
+    class Config:
+        pass
+
+    config = Config()
+    assert config._paths == [".", "tests/"]
