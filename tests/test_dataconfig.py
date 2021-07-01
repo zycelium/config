@@ -13,6 +13,8 @@ def test_dataconfig_init_bare():
     config = Config()
     assert is_dataclass(config)
     assert config._file == DEFAULT_FILE_NAME
+    assert config._auto == True
+    assert config._paths == ["."]
 
 
 def test_dataconfig_init_with_file():
