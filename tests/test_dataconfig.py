@@ -1,4 +1,7 @@
-from dataclasses import dataclass, is_dataclass
+from dataclasses import dataclass, is_dataclass, FrozenInstanceError
+
+import pytest
+
 from zycelium.dataconfig import dataconfig
 
 TEST_FILE_NAME = "test.ini"
@@ -43,3 +46,14 @@ def test_dataconfig_init_with_paths():
 
     config = Config()
     assert config._paths == [".", "tests/"]
+
+
+@pytest.mark.xfail(raises=FrozenInstanceError)
+def test_frozen_dataconfig():
+    @dataconfig(frozen=True)
+    class Config:
+        message = "test"
+
+    config = Config()
+    assert config.message == "test"
+    config.message = "fail"
