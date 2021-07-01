@@ -48,6 +48,7 @@ def save(obj, path="", unrepr=True, overwrite=False):
         config_obj.write(outfile)
     return obj
 
+
 def dataconfig(
     _cls=None,
     *,
