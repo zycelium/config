@@ -38,7 +38,7 @@ Hello, DataConfig!
 
 The defaults here are:
 
-Config file name: "config.ini"
+Config file name: `"config.ini"`
 
-Paths to look for the config file (current working directory): ["."]
+Paths to look for the config file (current working directory): `["."]`
 
