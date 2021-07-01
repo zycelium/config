@@ -66,7 +66,7 @@ In this example, we specify the file-name on this line:
 from zycelium.dataconfig import dataconfig
 
 
-@dataconfig(paths=[".", "examples", "/usr/local/etc])
+@dataconfig(paths=[".", "examples", "/usr/local/etc"])
 class Config:
     name: str = "World"
 
