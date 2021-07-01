@@ -4,6 +4,9 @@ Create [dataclasses](https://docs.python.org/3/library/dataclasses.html) backed 
 
 ## Usage
 
+
+### Use Defaults
+
 Create a new python script and name it `example.py`
 
 ```python
@@ -32,3 +35,10 @@ your console session should look something like this:
 $ python example.py
 Hello, DataConfig!
 ```
+
+The defaults here are:
+
+Config file name: "config.ini"
+
+Paths to look for the config file (current working directory): ["."]
+
