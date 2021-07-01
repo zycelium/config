@@ -1,9 +1,13 @@
 from dataclasses import dataclass
 
 
-def dataconfig(_cls):
-    def wrap():
-        wrapped_cls = dataclass(_cls)
-        return _cls
+def dataconfig(_cls=None, *, file="config.ini"):
+    def wrap(cls):
+        setattr(cls, "_file", file)
+        wrapped_cls = dataclass(cls)
+        return wrapped_cls
 
-    return wrap
+    if _cls is None:
+        return wrap
+
+    return wrap(_cls)
