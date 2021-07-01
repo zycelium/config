@@ -148,3 +148,12 @@ def test_save_no_overwrite():
 
     config.load()
     assert config.message == "hello-test"
+
+
+def test_load_shortcut():
+    @dataconfig(file=TEST_FILE_NAME, paths=TEST_PATHS)
+    class Config:
+        message: str = "test"
+
+    config = Config().load()
+    assert config.message == "hello-test"

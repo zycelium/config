@@ -30,6 +30,7 @@ def load(obj, path="", unrepr=True, replace=False):
         for k, v in config_obj.items():
             if hasattr(obj, k):
                 setattr(obj, k, v)
+        return obj
     else:
         fields = {k: v for k, v in config_obj.items() if hasattr(obj, k)}
         return replace_dataclass(obj, **fields)
@@ -45,7 +46,7 @@ def save(obj, path="", unrepr=True, overwrite=False):
         raise FileExistsError(f"File {path} exists, refusing to overwrite.")
     with path.open("wb") as outfile:
         config_obj.write(outfile)
-
+    return obj
 
 def dataconfig(
     _cls=None,
