@@ -66,7 +66,7 @@ In this example, we specify the file-name on this line:
 from zycelium.dataconfig import dataconfig
 
 
-@dataconfig(paths=[".", "examples"])
+@dataconfig(paths=[".", "examples", "/usr/local/etc])
 class Config:
     name: str = "World"
 
@@ -78,4 +78,5 @@ print(f"Hello, {config.name}!")
 Here, we pass `paths=[".", "examples"]` to `@dataconfig()`
 to specify the paths on filesystem where `dataconfig` should
 look for the default `"config.ini"` file. We can also specify
-the filename along with the paths.
+the filename along with the paths. Paths can be relative 
+to current working directory or absolute.
