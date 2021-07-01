@@ -11,6 +11,7 @@ def test_dataconfig_init_bare():
 
     config = Config()
     assert is_dataclass(config)
+    assert config._file == "config.ini"
 
 
 def test_dataconfig_init_with_file():
@@ -21,3 +22,13 @@ def test_dataconfig_init_with_file():
     config = Config()
     assert is_dataclass(config)
     assert config._file == TEST_FILE_NAME
+
+
+def test_dataconfig_init_without_file():
+    @dataconfig()
+    class Config:
+        pass
+
+    config = Config()
+    assert is_dataclass(config)
+    assert config._file == "config.ini"
