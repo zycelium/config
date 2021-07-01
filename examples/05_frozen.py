@@ -6,13 +6,15 @@ class Config:
     name: str = "World"
 
 
-# Following line throws: 
+# Following line throws:
 #   dataclasses.FrozenInstanceError: cannot assign to field 'name'
-config = Config().load()
+config = Config()
+config = config.load()  # type: Config
 
 # To properly load a frozen dataconfig, pass `replace=True` to load().
 # Comment-out the line above and uncomment below for expected behaviour:
 
-# config = Config().load(replace=True)
+# config = config.load(replace=True)  # type: Config
 
 print(f"Hello, {config.name}!")
+

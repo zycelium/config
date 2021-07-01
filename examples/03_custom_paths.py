@@ -5,6 +5,7 @@ from zycelium.dataconfig import dataconfig
 class Config:
     name: str = "World"
 
-config = Config().load()
+config = Config()
+config.load()
 
 print(f"Hello, {config.name}!")
