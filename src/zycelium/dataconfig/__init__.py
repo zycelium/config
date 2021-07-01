@@ -5,7 +5,7 @@ from pathlib import Path
 from configobj import ConfigObj
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 
 def locate(file, paths, auto, file_path=""):
