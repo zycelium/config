@@ -111,3 +111,24 @@ To overwrite it, pass `overwrite=True` to `save()` like this:
 
 `config.save(overwrite=True)`
 
+### Frozen configuration:
+
+```python
+from zycelium.dataconfig import dataconfig
+
+
+@dataconfig(frozen=True)
+class Config:
+    name: str = "World"
+
+config = Config().load(replace=True)
+
+print(f"Hello, {config.name}!")
+```
+
+To load a frozen config, we need to pass `replace=True` to `load()`,
+if we forget, we get the error:
+
+`dataclasses.FrozenInstanceError: cannot assign to field 'name'`
+
+Once loaded, we cannot overwrite the configuration.
