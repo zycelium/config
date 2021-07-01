@@ -1,14 +1,27 @@
 from setuptools import setup, find_namespace_packages
 
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
 setup(
     name="zycelium.dataconfig",
     version="0.0.1",
     description="App Configuration Library",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/zycelium/dataconfig",
+    project_urls={
+        "Bug Tracker": "https://github.com/zycelium/dataconfig/issues",
+    },
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+    ],
     packages=find_namespace_packages(include=["zycelium.*"]),
     package_dir={"": "src"},
     zip_safe=False,
-    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*",
+    python_requires=">=3.7",
     install_requires=[
         "click>=8.0",
         "configobj>=5.0",
