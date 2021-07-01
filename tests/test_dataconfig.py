@@ -55,7 +55,7 @@ def test_dataconfig_init_with_paths():
 def test_frozen_dataconfig():
     @dataconfig(frozen=True)
     class Config:
-        message = "test"
+        message: str = "test"
 
     config = Config()
     assert config.message == "test"
@@ -82,3 +82,42 @@ def test_locate_missing_file_auto():
 @pytest.mark.xfail(raises=FileNotFoundError)
 def test_locate_missing_file_no_auto():
     path = locate(TEST_FILE_NAME, DEFAULT_PATHS, auto=False)
+
+
+def test_load_preset_path():
+    @dataconfig(file=TEST_FILE_NAME, paths=TEST_PATHS)
+    class Config:
+        message: str = "test"
+
+    config = Config()
+    config.load()
+
+    assert config.message == "hello-test"
+
+
+def test_load_custom_path():
+    @dataconfig
+    class Config:
+        message: str = "test"
+
+    path = Path("tests/").joinpath(TEST_FILE_NAME)
+    config = Config()
+    config.load(path=path)
+
+    assert config.message == "hello-test"
+
+
+def test_load_frozen():
+    @dataconfig(frozen=True)
+    class Config:
+        message: str = "test"
+
+    path = Path("tests/").joinpath(TEST_FILE_NAME)
+    config = Config()
+    assert config.message == "test"
+    # When frozen, load needs to be passed `replace=True` 
+    # and its returl value must be assigned to config.
+    # This avoids accidental assignment while allowing
+    # override.
+    config = config.load(path=path, replace=True)
+    assert config.message == "hello-test"

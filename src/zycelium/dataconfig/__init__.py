@@ -1,5 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, FrozenInstanceError
+from dataclasses import replace as replace_dataclass
 from pathlib import Path
+
+from configobj import ConfigObj
 
 
 def locate(file, paths, auto, file_path=""):
@@ -13,6 +16,20 @@ def locate(file, paths, auto, file_path=""):
         return Path(".").joinpath(file)
     else:
         raise FileNotFoundError(f"File {file!r} not found at {paths}.")
+
+
+def load(obj, path="", unrepr=True, replace=False):
+    path = locate(
+        file=obj._file, paths=obj._paths, auto=obj._auto, file_path=path
+    )
+    config_obj = ConfigObj(str(path), unrepr=unrepr)
+    if not replace:
+        for k, v in config_obj.items():
+            if hasattr(obj, k):
+                setattr(obj, k, v)
+    else:
+        fields = {k: v for k, v in config_obj.items() if hasattr(obj, k)}
+        return replace_dataclass(obj, **fields)
 
 
 def dataconfig(
@@ -32,6 +49,7 @@ def dataconfig(
         setattr(cls, "_file", file)
         setattr(cls, "_paths", paths or ["."])
         setattr(cls, "_auto", auto)
+        setattr(cls, "load", load)
         wrapped_cls = dataclass(
             cls,
             init=init,
