@@ -4,7 +4,7 @@ Create [dataclasses](https://docs.python.org/3/library/dataclasses.html) backed 
 
 ## Usage
 
-### Use Defaults
+### Use defaults:
 
 Create a new python script and name it `example.py`
 
@@ -80,3 +80,34 @@ to specify the paths on filesystem where `dataconfig` should
 look for the default `"config.ini"` file. We can also specify
 the filename along with the paths. Paths can be relative 
 to current working directory or absolute.
+
+### Save configuration to file:
+
+```python
+from zycelium.dataconfig import dataconfig
+
+FILE_NAME = "newconfig.ini"
+
+@dataconfig(file=FILE_NAME)
+class Config:
+    name: str = "World"
+
+config = Config()
+config.save()
+
+print(f"Saved config to file: {FILE_NAME}.")
+```
+
+Here, we set the config-file-name while creating the class,
+when `save()` is called, it will create the file and save
+contents of `Config`.
+
+If we try running the same example again, we will get an error:
+
+`FileExistsError: File newconfig.ini exists, refusing to overwrite.`
+
+This is to protect us from accidentally overwriting an existing config file.
+To overwrite it, pass `overwrite=True` to `save()` like this:
+
+`config.save(overwrite=True)`
+
