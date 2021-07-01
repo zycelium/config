@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="zycelium.dataconfig",
     version="0.0.1",
-    description="App Configuration Library",
+    description="Create dataclasses backed by configuration files.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/zycelium/dataconfig",
