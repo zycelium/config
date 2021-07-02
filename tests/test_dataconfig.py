@@ -178,4 +178,24 @@ def test_click_option():
     runner = CliRunner()
     result = runner.invoke(test_cmd, ["--message", "Tests"])
     assert result.exit_code == 0
-    assert result.output == 'Hello, Tests!\nHello, hello-test!\n'
+    assert result.output == 'Hello, Tests!\nHello, Tests!\n'
+
+
+def test_click_option_frozen_fails():
+    @dataconfig(file=TEST_FILE_NAME, paths=TEST_PATHS, frozen=True)
+    class Config:
+        message: str = "test"
+
+    config = Config()
+
+    @click.command()
+    @click.option("--message")
+    @config.click_option()
+    def test_cmd(message):
+        print(f"Hello, {message}!")
+        print(f"Hello, {config.message}!")
+
+    runner = CliRunner()
+    result = runner.invoke(test_cmd, ["--message", "Tests"])
+    assert result.exit_code == 1
+

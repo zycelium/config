@@ -31,13 +31,17 @@ def load(obj, path="", unrepr=True, replace=False):
         file=obj._file, paths=obj._paths, auto=obj._auto, file_path=path
     )
     config_obj = ConfigObj(str(path), unrepr=unrepr)
+    return obj.from_dict(config_obj, replace=replace)
+
+
+def from_dict(obj, data, replace=False):
     if not replace:
-        for k, v in config_obj.items():
+        for k, v in data.items():
             if hasattr(obj, k):
                 setattr(obj, k, v)
         return obj
     else:
-        fields = {k: v for k, v in config_obj.items() if hasattr(obj, k)}
+        fields = {k: v for k, v in data.items() if hasattr(obj, k)}
         return replace_dataclass(obj, **fields)
 
 
@@ -63,7 +67,14 @@ def click_option(obj, *param_decls, **attrs):
         attrs.setdefault("expose_value", False)
         path = attrs.pop("path", DEFAULT_FILE)
         attrs["callback"] = partial(_file_option_callback, obj, path=path)
-        return click.option(*param_decls, **attrs)(func)
+        config_update_option = click.option(
+            "--config-update",
+            is_eager=False,
+            expose_value=False,
+            hidden=True,
+            callback=partial(_config_update_callback, obj),
+        )
+        return config_update_option(click.option(*param_decls, **attrs)(func))
 
     return wrap
 
@@ -74,6 +85,11 @@ def _file_option_callback(obj, ctx, option, value, path):
     obj.load(path=value)
     options = asdict(obj)
     ctx.default_map.update(options)
+
+
+def _config_update_callback(obj, ctx, option, value):
+    data = {k: v for k, v in ctx.params.items() if v is not None}
+    obj.from_dict(data)
 
 
 def dataconfig(
@@ -95,6 +111,7 @@ def dataconfig(
         setattr(cls, "_auto", auto)
         setattr(cls, "load", load)
         setattr(cls, "save", save)
+        setattr(cls, "from_dict", from_dict)
         setattr(cls, "click_option", click_option)
         wrapped_cls = dataclass(
             cls,

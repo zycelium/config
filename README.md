@@ -135,6 +135,50 @@ if we forget, we get the error:
 Once loaded, we cannot overwrite the configuration.
 
 
+### Use with Click Integration for CLI apps:
+
+Here, dataconfig will generate options for click CLI framework,
+one to add defaults to all options with names that exist in
+the dataconfig class, overridden by values found in the configuration
+file. These options can be overridden by passing values as usual
+to the command line.
+
+There's also a new option added to the command: "--conf", which
+can be used to specify a different configuration file to load
+defaults.
+
+And finally, any changes made in the command line are applied to
+the dataconfig object, but not saved to the configuration file
+unless the `save()` method is called later.
+
+Frozen dataconfig does not work with commandline integration.
+
+```python
+import click
+from zycelium.dataconfig import dataconfig
+
+
+@dataconfig
+class Config:
+    name: str = "World"
+
+
+config = Config()
+# No need to load() config when using click_option()
+
+
+@click.command()
+@click.option("--name")
+@config.click_option()
+def main(name):
+    print(f"Hello, {name}!")
+    print(f"Hello, {config.name}!")
+
+
+main()
+```
+
+
 ### For more examples:
 
 Read through the `tests/` directory, where you will find the 

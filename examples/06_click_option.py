@@ -8,15 +8,15 @@ class Config:
 
 
 config = Config()
-config.load()
+# No need to load() config when using click_option()
 
 
 @click.command()
 @click.option("--name")
 @config.click_option()
-def test_cmd(name):
+def main(name):
     print(f"Hello, {name}!")
     print(f"Hello, {config.name}!")
 
 
-test_cmd()
+main()
