@@ -1,7 +1,9 @@
 from dataclasses import dataclass, is_dataclass, FrozenInstanceError
 from pathlib import Path
 
+import click
 import pytest
+from click.testing import CliRunner
 
 from zycelium.dataconfig import dataconfig, locate
 
@@ -157,3 +159,23 @@ def test_load_shortcut():
 
     config = Config().load()
     assert config.message == "hello-test"
+
+
+def test_click_option():
+    @dataconfig(file=TEST_FILE_NAME, paths=TEST_PATHS)
+    class Config:
+        message: str = "test"
+
+    config = Config()
+
+    @click.command()
+    @click.option("--message")
+    @config.click_option()
+    def test_cmd(message):
+        print(f"Hello, {message}!")
+        print(f"Hello, {config.message}!")
+
+    runner = CliRunner()
+    result = runner.invoke(test_cmd, ["--message", "Tests"])
+    assert result.exit_code == 0
+    assert result.output == 'Hello, Tests!\nHello, hello-test!\n'

@@ -1,11 +1,16 @@
 from dataclasses import asdict, dataclass, FrozenInstanceError
 from dataclasses import replace as replace_dataclass
+from functools import partial
 from pathlib import Path
+
+import click
 
 from configobj import ConfigObj
 
 
 __version__ = "0.0.2"
+
+DEFAULT_FILE = "config.ini"
 
 
 def locate(file, paths, auto, file_path=""):
@@ -49,10 +54,32 @@ def save(obj, path="", unrepr=True, overwrite=False):
     return obj
 
 
+def click_option(obj, *param_decls, **attrs):
+    param_decls = param_decls or ("--conf",)
+
+    def wrap(func):
+        attrs.setdefault("is_eager", True)
+        attrs.setdefault("help", "Read configuration from FILE")
+        attrs.setdefault("expose_value", False)
+        path = attrs.pop("path", DEFAULT_FILE)
+        attrs["callback"] = partial(_file_option_callback, obj, path=path)
+        return click.option(*param_decls, **attrs)(func)
+
+    return wrap
+
+
+def _file_option_callback(obj, ctx, option, value, path):
+    ctx.default_map = ctx.default_map or {}
+    path = value or path
+    obj.load(path=value)
+    options = asdict(obj)
+    ctx.default_map.update(options)
+
+
 def dataconfig(
     _cls=None,
     *,
-    file="config.ini",
+    file=DEFAULT_FILE,
     paths=None,
     auto=True,
     init=True,
@@ -68,6 +95,7 @@ def dataconfig(
         setattr(cls, "_auto", auto)
         setattr(cls, "load", load)
         setattr(cls, "save", save)
+        setattr(cls, "click_option", click_option)
         wrapped_cls = dataclass(
             cls,
             init=init,
