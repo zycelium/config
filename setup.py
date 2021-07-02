@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="zycelium.dataconfig",
-    version="0.0.2",
+    version="0.0.3",
     description="Create dataclasses backed by configuration files.",
     author="Harshad Sharma",
     author_email="harshad@sharma.io",

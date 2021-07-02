@@ -8,7 +8,7 @@ import click
 from configobj import ConfigObj
 
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 DEFAULT_FILE = "config.ini"
 
