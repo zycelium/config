@@ -11,9 +11,9 @@ setup(
     author_email="harshad@sharma.io",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/zycelium/dataconfig",
+    url="https://github.com/zycelium/python-dataconfig",
     project_urls={
-        "Bug Tracker": "https://github.com/zycelium/dataconfig/issues",
+        "Bug Tracker": "https://github.com/zycelium/python-dataconfig/issues",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
