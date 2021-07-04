@@ -45,6 +45,11 @@ def from_dict(obj, data, replace=False):
         return replace_dataclass(obj, **fields)
 
 
+def to_dict(obj):
+    fields = asdict(obj)
+    return fields
+
+
 def save(obj, path="", unrepr=True, overwrite=False):
     path = locate(
         file=obj._file, paths=obj._paths, auto=obj._auto, file_path=path
@@ -82,8 +87,7 @@ def click_option(obj, *param_decls, **attrs):
 def _file_option_callback(obj, ctx, option, value, path):
     ctx.default_map = ctx.default_map or {}
     path = value or path
-    obj.load(path=value)
-    options = asdict(obj)
+    options = obj.to_dict()
     ctx.default_map.update(options)
 
 
