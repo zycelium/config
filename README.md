@@ -4,6 +4,8 @@ Create [dataclasses](https://docs.python.org/3/library/dataclasses.html) backed 
 
 [![Python package](https://github.com/zycelium/dataconfig/actions/workflows/python-package.yml/badge.svg)](https://github.com/zycelium/dataconfig/actions/workflows/python-package.yml)
 
+- `Development Status :: 3 - Alpha`
+
 ## Usage
 
 ### Use defaults:
