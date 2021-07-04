@@ -70,7 +70,7 @@ def click_option(obj, *param_decls, **attrs):
         attrs.setdefault("is_eager", True)
         attrs.setdefault("help", "Read configuration from FILE")
         attrs.setdefault("expose_value", False)
-        path = attrs.pop("path", DEFAULT_FILE)
+        path = attrs.pop("path", obj._file)
         attrs["callback"] = partial(_file_option_callback, obj, path=path)
         config_update_option = click.option(
             "--config-update",
@@ -87,6 +87,7 @@ def click_option(obj, *param_decls, **attrs):
 def _file_option_callback(obj, ctx, option, value, path):
     ctx.default_map = ctx.default_map or {}
     path = value or path
+    obj.load(path=path)
     options = obj.to_dict()
     ctx.default_map.update(options)
 
@@ -116,6 +117,7 @@ def dataconfig(
         setattr(cls, "load", load)
         setattr(cls, "save", save)
         setattr(cls, "from_dict", from_dict)
+        setattr(cls, "to_dict", to_dict)
         setattr(cls, "click_option", click_option)
         wrapped_cls = dataclass(
             cls,
